@@ -129,18 +129,6 @@ namespace Lidgren.Network
 			var ep = (EndPoint)new NetEndPoint(m_configuration.LocalAddress, reBind ? m_listenPort : m_configuration.Port);
 			m_socket.Bind(ep);
 
-			try
-			{
-				const uint IOC_IN = 0x80000000;
-				const uint IOC_VENDOR = 0x18000000;
-				uint SIO_UDP_CONNRESET = IOC_IN | IOC_VENDOR | 12;
-				m_socket.IOControl((int)SIO_UDP_CONNRESET, new byte[] { Convert.ToByte(false) }, null);
-			}
-			catch
-			{
-				// ignore; SIO_UDP_CONNRESET not supported on this platform
-			}
-
 			var boundEp = m_socket.LocalEndPoint as NetEndPoint;
 			LogDebug("Socket bound to " + boundEp + ": " + m_socket.IsBound);
 			m_listenPort = boundEp.Port;
